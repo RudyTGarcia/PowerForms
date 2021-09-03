@@ -1,8 +1,7 @@
 import Utils from '../util/Utils';
 import DOMUtils from '../util/DOMUtils';
 import autocomplete from 'autocompleter';
-import ITSDirectoryInfo from '../util/data/ITSDirectoryInfo.json'; 
-const ITSdir = ITSDirectoryInfo; 
+
 import telData from '../util/data/telData.json'; 
 //const empInf = telData; 
 
