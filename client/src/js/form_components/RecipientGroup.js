@@ -3,6 +3,12 @@ import DOMUtils from '../util/DOMUtils';
 import autocomplete from 'autocompleter';
 import ITSDirectoryInfo from '../util/data/ITSDirectoryInfo.json'; 
 const ITSdir = ITSDirectoryInfo; 
+import telData from '../util/data/telData.json'; 
+//const empInf = telData; 
+
+// var empDir = []; 
+
+// const emp = {label: "", value: ""}; 
 
 
 
@@ -15,7 +21,10 @@ export default class RecipientGroup {
     this.inputNode = null;
 
     this.required = !(this.config.minListCount == 0);
+
   }
+
+  
 
   addToDOM(parentNode) {
     const inputId = 'recipient_' + this.id;
@@ -65,8 +74,27 @@ export default class RecipientGroup {
       },
       //className: 'autocomplete-customizations',
       fetch: function(text, callback) {
-          text = text.toLowerCase();
-          var suggestions = ITSdir.filter(n => n.displayName.toLowerCase().includes(text));
+          text = text.replace(/[&\#,+()$~%.'":*?`!^<>{}]/g, '').toLowerCase();
+
+          var filteredEmps = telData.filter(function(emp){
+            if(emp.m !== "")
+            {
+              return emp.f.toLowerCase().concat(' ', emp.l.toLowerCase()).includes(text);
+            }
+            
+          });
+
+          var employee = {}; 
+          var employeeCollection = []; 
+
+          filteredEmps.forEach(function(item){
+            employee.label = `${item.f} ${item.l} | ${item.t} | ${item.d}`; 
+            employee.value = item.m; 
+            employeeCollection.push(employee); 
+            employee = {};
+          });
+
+          var suggestions = employeeCollection;
           callback(suggestions);
       },
       debounceWaitMs: 200,
@@ -78,9 +106,6 @@ export default class RecipientGroup {
       container: document.createElement("div")
   });
     divNode.appendChild(inputNode);
-
-
-
 
     var feedbackNode = document.createElement('div');
     feedbackNode.className = "invalid-feedback";
