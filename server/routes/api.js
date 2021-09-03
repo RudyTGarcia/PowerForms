@@ -56,6 +56,7 @@ router.get('/getWorkflows', async function (req, res, next) {
 
 // GET /workflows/{workflowId}
 router.get('/workflows/:workflowId', async function(req, res, next){
+  console.log("Hit");
   try {
     const workflowId = req.params.workflowId;
     const api_response = await APIClient.get(`/workflows/${workflowId}`);
@@ -82,9 +83,11 @@ router.get('/workflows/:workflowId', async function(req, res, next){
 });
 
 router.post('/workflows/:workflowId/agreements', async function(req, res, next){
+  
   try {
     const workflowId = req.params.workflowId;
     const wfDataRequest = await APIClient.get(`/workflows/${workflowId}`);
+    
     let worflowProcessor = new WorkflowAgreementProcessor(wfDataRequest.data, config.WorkFlowConfig, req.body);
 
     let agreementData = worflowProcessor.getAgreement();
@@ -94,7 +97,7 @@ router.post('/workflows/:workflowId/agreements', async function(req, res, next){
     if(sendingAccount) {
       headers["x-api-user"] = `email:${sendingAccount}`;
     }
-
+    console.log(agreementData);
     const agreementRequest = await APIClient.post(`/workflows/${workflowId}/agreements`, agreementData, {headers});
     res.json(agreementRequest.data);
   }

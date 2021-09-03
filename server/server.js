@@ -5,11 +5,11 @@ const express = require('express');
 const async = require('express-async-await');
 const bodyParser = require('body-parser');
 const path = require('path');
-const config = require('../config');
+const config = require('../config/index');
 
 // detect if running in a production or development env
-const isDev = !(process.env.NODE_ENV === 'production' || yargs.argv.env == "production" || false);
-const isDevClient = (yargs.argv.devClient || false);
+const isDev = !(process.env.NODE_ENV === 'production' || yargs.argv.env == "production" || true);
+const isDevClient = (yargs.argv.devClient || true);
 
 // SEVER SETUP
 // =============================================================================
@@ -33,10 +33,12 @@ app.use(bodyParser.json());
 
 //log endpoint
 app.use(function (req, res, next) {
-  console.info('REQUEST %s %s', req.method, req.originalUrl)
-  next() // pass control to the next handler
+  console.info('REQUEST %s %s', req.method, req.originalUrl);
+  next(); // pass control to the next handler
 });
 
+console.log(`Client: ${process.env.NODE_ENV }`);
+console.log(isDevClient);
 if (isDevClient) {
   const webpackDevMiddleware = require('webpack-dev-middleware');
   const webpackHotMiddleware = require('webpack-hot-middleware');

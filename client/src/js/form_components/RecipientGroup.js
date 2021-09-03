@@ -1,5 +1,10 @@
 import Utils from '../util/Utils';
 import DOMUtils from '../util/DOMUtils';
+import autocomplete from 'autocompleter';
+import ITSDirectoryInfo from '../util/data/ITSDirectoryInfo.json'; 
+const ITSdir = ITSDirectoryInfo; 
+
+
 
 export default class RecipientGroup {
   constructor(id, config){
@@ -29,13 +34,53 @@ export default class RecipientGroup {
     divNode.appendChild(labelNode);
 
     // Create the input
+    // var inputNode = document.createElement("input");
+    // inputNode.type = "email";
+    // inputNode.id = inputId;
+    // inputNode.name = inputId;
+    // inputNode.className = 'form-control';
+    // inputNode.placeholder = "Enter Recipient's Email";
+    // divNode.appendChild(inputNode);
     var inputNode = document.createElement("input");
-    inputNode.type = "email";
     inputNode.id = inputId;
     inputNode.name = inputId;
-    inputNode.className = 'form-control';
-    inputNode.placeholder = "Enter Recipient's Email";
+    inputNode.className = 'autocomplete form-control';
+    inputNode.placeholder = "Search by Name";
+    autocomplete({
+      onSelect: function(item) {
+          inputNode.value = item.value;
+      },
+      input: inputNode,
+      minLength: 2,
+      emptyMsg: 'Search by Name',
+      render: function(item, currentValue) {
+          var div = document.createElement("div");
+          div.textContent = item.label;
+          return div;
+      },
+      renderGroup: function(groupName, currentValue) {
+          var div = document.createElement("div");
+          div.textContent = groupName;
+          return div;
+      },
+      //className: 'autocomplete-customizations',
+      fetch: function(text, callback) {
+          text = text.toLowerCase();
+          var suggestions = ITSdir.filter(n => n.displayName.toLowerCase().includes(text));
+          callback(suggestions);
+      },
+      debounceWaitMs: 200,
+      // customize: function(input, inputRect, container, maxHeight) {
+      //     ...
+      // },
+      preventSubmit: true,
+      disableAutoSelect: true,
+      container: document.createElement("div")
+  });
     divNode.appendChild(inputNode);
+
+
+
 
     var feedbackNode = document.createElement('div');
     feedbackNode.className = "invalid-feedback";

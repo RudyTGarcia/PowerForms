@@ -35,6 +35,7 @@ export async function postTransientDocument(file) {
 }
 
 export async function postWorkflowAgreement(workflowId, agreementData) {
+  
   try {
     const apiResponse = await API.post(`/api/workflows/${workflowId}/agreements`, agreementData, {
       headers: {
@@ -54,7 +55,6 @@ export async function postWorkflowAgreement(workflowId, agreementData) {
         throw new InternalServerError(e.response.data);
       }
     }
-
     console.error(e);
     throw e;
   }

@@ -4,7 +4,7 @@
 # Please make sure that all your information is correct.
 
 # This is the port that the express server should listen on if it is not provided by process.env.PORT
-PORT: 80
+PORT: 1337
 
 # This is the public path the server will be located at. It must end with a '/'.
 publicPath: '/PowerForm/'

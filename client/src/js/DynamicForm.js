@@ -118,6 +118,8 @@ export default class DynamicForm {
     this.resetDOMNode(sectionNode, false);
 
     let fieldsetNode = document.createElement('fieldset');
+    
+   
     sectionNode.appendChild(fieldsetNode);
 
     let headerNode = document.createElement('legend');
