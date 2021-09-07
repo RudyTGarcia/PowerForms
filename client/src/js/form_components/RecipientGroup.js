@@ -18,9 +18,7 @@ export default class RecipientGroup {
     this.number_of_members = 0;
     this.divNode = "";
     this.inputNode = null;
-
-    this.required = !(this.config.minListCount == 0);
-
+    this.required = !(this.config.minListCount == 0); 
   }
 
   
@@ -41,19 +39,13 @@ export default class RecipientGroup {
     labelNode.htmlFor = inputId;
     divNode.appendChild(labelNode);
 
-    // Create the input
-    // var inputNode = document.createElement("input");
-    // inputNode.type = "email";
-    // inputNode.id = inputId;
-    // inputNode.name = inputId;
-    // inputNode.className = 'form-control';
-    // inputNode.placeholder = "Enter Recipient's Email";
-    // divNode.appendChild(inputNode);
     var inputNode = document.createElement("input");
     inputNode.id = inputId;
     inputNode.name = inputId;
     inputNode.className = 'autocomplete form-control';
     inputNode.placeholder = "Search by Name";
+
+    //create auto complete out of text input
     autocomplete({
       onSelect: function(item) {
           inputNode.value = item.value;
@@ -73,28 +65,29 @@ export default class RecipientGroup {
       },
       //className: 'autocomplete-customizations',
       fetch: function(text, callback) {
+            //remove special characters and force value 
           text = text.replace(/[&\#,+()$~%.'":*?`!^<>{}]/g, '').toLowerCase();
-
+          //Filter json data from text input. Return a collection of the filtered employees
           var filteredEmps = telData.filter(function(emp){
             if(emp.m !== "")
             {
               return emp.f.toLowerCase().concat(' ', emp.l.toLowerCase()).includes(text);
             }
-            
           });
-
+          
+            //Instantiate empty object. For autocomplete binding purposes
           var employee = {}; 
+          //Instantiate an empty array 
           var employeeCollection = []; 
-
+            //loop through filtered array, create a new employee object and add it to the employee collection array.
           filteredEmps.forEach(function(item){
             employee.label = `${item.f} ${item.l} | ${item.t} | ${item.d}`; 
             employee.value = item.m; 
             employeeCollection.push(employee); 
             employee = {};
           });
-
-          var suggestions = employeeCollection;
-          callback(suggestions);
+          //return employee collection in the auto complete drop down. 
+          callback(employeeCollection);
       },
       debounceWaitMs: 200,
       // customize: function(input, inputRect, container, maxHeight) {
