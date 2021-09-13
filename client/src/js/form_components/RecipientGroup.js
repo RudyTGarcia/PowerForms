@@ -3,13 +3,6 @@ import DOMUtils from '../util/DOMUtils';
 import autocomplete from 'autocompleter';
 
 import telData from '../util/data/telData.json'; 
-//const empInf = telData; 
-
-// var empDir = []; 
-
-// const emp = {label: "", value: ""}; 
-
-
 
 export default class RecipientGroup {
   constructor(id, config){
@@ -22,7 +15,6 @@ export default class RecipientGroup {
   }
 
   
-
   addToDOM(parentNode) {
     const inputId = 'recipient_' + this.id;
 
