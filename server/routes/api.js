@@ -50,17 +50,18 @@ router.get('/getWorkflows', async function (req, res, next) {
 
   const workflow_list = await getWorkflows();
   const data = await workflow_list.json();
-
   res.json(data['userWorkflowList']);
 });
 
 // GET /workflows/{workflowId}
 router.get('/workflows/:workflowId', async function(req, res, next){
-  console.log("Hit");
+  
   try {
     const workflowId = req.params.workflowId;
     const api_response = await APIClient.get(`/workflows/${workflowId}`);
+     
     let workflowConfig = new WorkflowConfig(api_response.data, config.WorkFlowConfig);
+    console.log(api_response.data);
     res.json(workflowConfig.getClientConfig());
   }
   catch(e) {
@@ -98,6 +99,7 @@ router.post('/workflows/:workflowId/agreements', async function(req, res, next){
       headers["x-api-user"] = `email:${sendingAccount}`;
     }
     console.log(agreementData);
+   
     const agreementRequest = await APIClient.post(`/workflows/${workflowId}/agreements`, agreementData, {headers});
     res.json(agreementRequest.data);
   }

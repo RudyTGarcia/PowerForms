@@ -55,8 +55,9 @@ class WorkflowConfig {
     let hide_readonly = this.settings.recipients.hide_readonly;
     let hide_predefined = this.settings.recipients.hide_predefined;
     var recipients = [];
-
+    
     this.wfData.recipientsListInfo.forEach(wfRecipient => {
+      
       if(hide_predefined && wfRecipient.defaultValue != "") {
         return;
       }
@@ -65,13 +66,16 @@ class WorkflowConfig {
         return;
       }
 
+      //Object.entries(wfRecipient).forEach(prop => console.log(prop));
+      
       recipients.push({
         name: wfRecipient.name,
         label: wfRecipient.label,
         defaultValue: wfRecipient.defaultValue,
         editable: wfRecipient.editable,
         minListCount: wfRecipient.minListCount,
-        maxListCount: wfRecipient.maxListCount
+        maxListCount: wfRecipient.maxListCount, 
+        // authenticationMethod: 'Adobe Sign'
       });
     });
 
@@ -87,7 +91,7 @@ class WorkflowConfig {
 
       this.wfData.ccsListInfo.forEach(data => {
         if(hide_readonly && !data.editable) {
-          return;
+          return; 
         }
 
         let defaultCCs = (data.defaultValue) ? data.defaultValue.split(/,|;/) : [];
